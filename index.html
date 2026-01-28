@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday! 🎂</title>
+    <style>
+        /* --- CORE VARIABLES & RESET --- */
+        :root {
+            --bg-body: #F0F2F5;
+            --bg-card: #FFF0F5; /* Lavender Blush */
+            --accent-color: #FF69B4; /* Hot Pink */
+            --secondary-accent: #9370DB; /* Purple */
+            --bubble-bg: #FFFFFF;
+            --text-color: #483D8B; /* Dark Slate Blue */
+            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --modal-bg: rgba(0, 0, 0, 0.85);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
+            color: var(--text-color);
+            overflow: hidden;
+            height: 100dvh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* --- THE CARD CONTAINER --- */
+        #card-frame {
+            width: 90vw;
+            max-width: 380px;
+            height: 85vh;
+            max-height: 700px;
+            background: linear-gradient(180deg, #FFF5F7 0%, #FFFFFF 100%);
+            border-radius: 24px;
+            box-shadow: 
+                0 20px 50px rgba(0,0,0,0.1),
+                0 0 0 8px rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- SLIDER AREA --- */
+        .slider-track {
+            display: flex;
+            width: 500%; /* 5 Slides */
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .slide {
+            width: 20%;
+            height: 100%;
+            position: relative;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            justify-content: flex-start;
+            padding-top: 60px;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        .main-headline {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            z-index: 10;
+            text-align: center;
+            text-shadow: 2px 2px 0px rgba(255,255,255,0.8);
+            margin-top: 10px;
+        }
+
+        .sub-caption {
+            font-size: 1rem;
+            color: var(--secondary-accent);
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            z-index: 10;
+            max-width: 85%;
+            line-height: 1.5;
+        }
+
+        /* --- PHOTO GALLERY PREVIEW --- */
+        .photo-stack {
+            position: relative;
+            width: 220px;
+            height: 280px;
+            margin-top: 20px;
+            perspective: 1000px;
+            cursor: pointer;
+            z-index: 20;
+        }
+
+        .photo-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            padding: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            transform-origin: center;
+            transition: transform 0.4s ease;
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            background-color: #ffe4e1;
+        }
+
+        .photo-card:nth-child(1) { transform: rotate(-6deg); z-index: 3; }
+        .photo-card:nth-child(2) { transform: rotate(4deg); z-index: 2; }
+        .photo-card:nth-child(3) { transform: rotate(-3deg); z-index: 1; }
+
+        .tap-hint {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: var(--text-color);
+            opacity: 0.6;
+            animation: pulse 2s infinite;
+        }
+
+        /* --- GLOBAL CAT COMPANION --- */
+        #cat-companion {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 130px;
+            height: 130px;
+            z-index: 50;
+            transition: all 0.5s ease;
+            cursor: pointer; /* Indicates interactivity */
+        }
+        
+        #cat-companion.hidden {
+            opacity: 0;
+            transform: translateY(20px) scale(0.8);
+            pointer-events: none;
+        }
+
+        #cat-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+            /* Idle Animation to suggest clicking */
+            animation: cat-idle-bounce 3s infinite ease-in-out;
+        }
+
+        @keyframes cat-idle-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .speech-bubble {
+            position: absolute;
+            bottom: 100%;
+            right: 10px;
+            background: var(--bubble-bg);
+            padding: 5px 5px;
+            border-radius: 18px;
+            border-bottom-right-radius: 2px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 180px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: var(--text-color);
+            opacity: 0;
+            transform: scale(0.8) translateY(10px);
+            transform-origin: bottom right;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            margin-bottom: 5px;
+            z-index: 55;
+        }
+
+        .speech-bubble.show {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+        }
+
+        /* --- FINAL SLIDE LAYOUT --- */
+        .final-slide-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100%;
+            width: 100%;
+            padding-top: 2px;
+        }
+
+        .final-text-group {
+            text-align: center;
+            margin-bottom: 50px;
+            z-index: 10;
+        }
+
+        .final-title {
+            font-size: 2.8rem;
+            line-height: 1.1;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            animation: bounce-text 2s infinite;
+        }
+
+        .final-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        .final-cat-wrapper {
+            width: 200px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+            position: relative; /* For bubble positioning */
+            cursor: pointer;
+        }
+
+        .final-cat-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        /*    animation: cat-idle-bounce 2s infinite; */
+        }
+
+        /* Special Bubble for Final Slide */
+        #final-bubble {
+            bottom: 85%;
+            left: 50%;
+            transform: translateX(-50%) scale(0.8) translateY(10px);
+            right: auto;
+            border-bottom-right-radius: 18px;
+            border-bottom-left-radius: 2px;
+            transform-origin: bottom center;
+            text-align: center;
+            width: 200px;
+        }
+
+        #final-bubble.show {
+            transform: translateX(-50%) scale(1) translateY(0);
+        }
+
+        /* --- GALLERY POPUP MODAL --- */
+        #gallery-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--modal-bg);
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #gallery-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content-area {
+            position: relative;
+            width: 90%;
+            max-width: 360px;
+            aspect-ratio: 3/4;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.4s ease;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 210;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .modal-cat-container {
+            position: absolute;
+            bottom: -10px;
+            left: -10px;
+            width: 100px;
+            height: 100px;
+            z-index: 205;
+            cursor: pointer;
+        }
+
+        .modal-bubble {
+            position: absolute;
+            bottom: 90px;
+            left: 10px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 15px;
+            border-bottom-left-radius: 2px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            font-size: 0.85rem;
+            color: var(--text-color);
+            width: 160px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            transform-origin: bottom left;
+            pointer-events: none;
+        }
+        
+        .modal-bubble.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- LOCK SCREEN --- */
+        #lock-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-card);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.6s ease;
+        }
+
+        .gift-box {
+            font-size: 6rem;
+            cursor: pointer;
+            animation: wiggle 3s infinite;
+            margin-bottom: 20px;
+        }
+
+        /* --- UTILS --- */
+        @keyframes wiggle { 0%, 100% { transform: rotate(0); } 10% { transform: rotate(-5deg); } 20% { transform: rotate(5deg); } 30% { transform: rotate(0); } }
+        @keyframes bounce-text { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+        
+        .anim-pop { animation: cat-pop 0.4s ease-out; }
+        @keyframes cat-pop { 0% { transform: scale(0); } 80% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        .swipe-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            opacity: 0.4;
+            z-index: 40;
+            pointer-events: none;
+        }
+
+        #confetti-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 45;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <source src="https://cdn.pixabay.com/audio/2022/10/05/audio_68636ba2a7.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="card-frame">
+        
+        <!-- LOCK OVERLAY -->
+        <div id="lock-screen" onclick="unlockGift()">
+            <div class="gift-box" id="gift-icon">🎁</div>
+            <p style="opacity:0.6; font-size: 0.9rem;">Tap to Open</p>
+        </div>
+
+        <!-- SLIDER -->
+        <div class="slider-track" id="slider-track">
+            
+            <!-- Slide 0: Intro -->
+            <div class="slide">
+                <h1 class="main-headline">Happy<br>Birthday!</h1>
+                <p class="sub-caption">To my favorite person in the world 🎂</p>
+                <div style="font-size: 4rem; margin-top: 30px;">🎉</div>
+            </div>
+
+            <!-- Slide 1: Message -->
+            <div class="slide">
+                <h1 class="main-headline">Wait... ✋</h1>
+                <p class="sub-caption">Time flies so fast, right? <br>Perasaan baru kemaren kita ketemu.</p>
+                <div style="font-size: 4rem; margin-top: 20px; opacity: 0.6;">⏳</div>
+            </div>
+
+            <!-- Slide 2: Gallery Trigger -->
+            <div class="slide">
+                <h1 class="main-headline">Throwback 📸</h1>
+                <p class="sub-caption">Tap foto buat liat aib-aib lucu kamu! 😜</p>
+                <div class="photo-stack" onclick="openGallery()">
+                    <div class="photo-card"><img src="https://images.unsplash.com/photo-1517423568366-8b83523034fd?w=500&auto=format&fit=crop&q=60" alt="Cover 1"></div>
+                    <div class="photo-card"><img src="https://images.unsplash.com/photo-1517677208171-0bc5e25bb396?w=500&auto=format&fit=crop&q=60" alt="Cover 2"></div>
+                </div>
+                <div class="tap-hint">Tap to open Gallery ✨</div>
+            </div>
+
+            <!-- Slide 3: Wish -->
+            <div class="slide">
+                <h1 class="main-headline">My Wish ✨</h1>
+                <p class="sub-caption">Semoga happy terus, sehat always, dan makin sayang aku! 🥰</p>
+                <div style="font-size: 4rem; margin-top: 20px;">🙏</div>
+            </div>
+
+            <!-- Slide 4: Finale -->
+            <div class="slide" id="final-slide">
+                <div class="final-slide-container">
+                    <div class="final-text-group">
+                        <h1 class="final-title">HBD<br>SAYANG ❤️</h1>
+                        <p class="final-subtitle">Semoga hari ini kamu ngerasa se-loved itu! Let's celebrate! 🎉</p>
+                    </div>
+                    
+                    <!-- Interactive Final Cat -->
+                    <div class="final-cat-wrapper" onclick="toggleFinalBubble()">
+                        <div class="speech-bubble" id="final-bubble">Happy Birthday ❤️ semoga hari ini kamu ngerasa se-loved itu</div>
+                        <img src="img/semua.png" alt="Party Cat">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GLOBAL CAT COMPANION (For slides 0-3) -->
+        <div id="cat-companion" onclick="toggleGlobalBubble()">
+            <div class="speech-bubble" id="bubble">
+                <span id="bubble-text">Loading...</span>
+            </div>
+            <img src="" id="cat-img" alt="Cat Mascot">
+        </div>
+
+        <div class="swipe-hint" id="nav-hint">Swipe Left ➡</div>
+        <canvas id="confetti-canvas"></canvas>
+
+    </div>
+
+    <!-- GALLERY MODAL -->
+    <div id="gallery-modal">
+        <div class="close-btn" onclick="closeGallery()">×</div>
+        
+        <div class="modal-content-area" id="modal-swipe-area">
+            <img src="" id="modal-img" class="gallery-image" alt="Gallery Photo">
+            
+            <!-- Modal Cat -->
+            <div class="modal-cat-container" onclick="toggleModalBubble()">
+                <div class="modal-bubble" id="modal-bubble">Test</div>
+                <img src="img/meng.png" style="width:100%; height:100%; object-fit:contain;" alt="Gallery Cat">
+            </div>
+        </div>
+        
+        <p style="color:white; margin-top:20px; font-size:0.9rem; opacity:0.8;">Swipe photo to see more ➡</p>
+    </div>
+
+    <script>
+        // --- DATA ---
+        const STORY_DATA = [
+            { text: "Cieee yang nambah tua hari ini... tapi tetep cute kok! 😜", cat: "img/yuki.png", anim: "anim-pop" },
+            { text: "I'm so lucky to have you. ✨", cat: "img/emong.png", anim: "anim-pop" },
+            { text: "Coba buka deh fotonya, gemes banget! 😭🤏", cat: "img/meng.png", anim: "anim-pop" },
+            { text: "Pokoknya doa terbaik buat kamu! 💪", cat: "img/embul.png", anim: "anim-pop" },
+            { text: "", cat: "", anim: "" } // Final slide handled separately
+        ];
+
+        const GALLERY_DATA = [
+            { src: "https://images.unsplash.com/photo-1517423568366-8b83523034fd?w=600&q=80", msg: "Ini pas kamu masih kecil kan? Lucu banget aaaaa 😭" },
+            { src: "https://images.unsplash.com/photo-1517677208171-0bc5e25bb396?w=600&q=80", msg: "Liat deh gaya kamu disini, cool abis 😎" },
+            { src: "https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=600&q=80", msg: "Definisi 'Glow Up' yang sesungguhnya! ✨" }
+        ];
+
+        // --- STATE ---
+        let currentSlide = 0;
+        let isUnlocked = false;
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        let isGalleryOpen = false;
+        let currentGalleryIndex = 0;
+
+        // --- DOM ELEMENTS ---
+        const cardFrame = document.getElementById('card-frame');
+        const sliderTrack = document.getElementById('slider-track');
+        const lockScreen = document.getElementById('lock-screen');
+        const catContainer = document.getElementById('cat-companion');
+        const catImg = document.getElementById('cat-img');
+        const bubble = document.getElementById('bubble');
+        const bubbleText = document.getElementById('bubble-text');
+        const navHint = document.getElementById('nav-hint');
+        const bgMusic = document.getElementById('bg-music');
+        
+        // Final Slide Elements
+        const finalBubble = document.getElementById('final-bubble');
+
+        // Modal Elements
+        const galleryModal = document.getElementById('gallery-modal');
+        const modalImg = document.getElementById('modal-img');
+        const modalBubble = document.getElementById('modal-bubble');
+        const modalSwipeArea = document.getElementById('modal-swipe-area');
+
+        // --- INIT ---
+        function init() {
+            catImg.src = "img/yuki.png";
+            bubbleText.innerHTML = "Psst… ayo dibuka kado nya 😼"; // Initial lock hint
+            bubble.classList.add('show'); // REMOVED: Auto show
+        }
+        init();
+
+        // --- MAIN INTERACTIONS ---
+        function unlockGift() {
+            if (isUnlocked) return;
+            bgMusic.volume = 0.4;
+            bgMusic.play().catch(() => console.log("Audio interaction needed"));
+            
+            const box = document.getElementById('gift-icon');
+            box.style.transform = "scale(1.2) rotate(10deg)";
+
+            setTimeout(() => {
+                lockScreen.style.opacity = '0';
+                setTimeout(() => {
+                    lockScreen.style.display = 'none';
+                    isUnlocked = true;
+                    updateSlide(0);
+                    // Slight bounce to hint interactivity
+                    catImg.classList.add('anim-pop'); 
+                }, 600);
+            }, 300);
+        }
+
+        // --- BUBBLE TOGGLE LOGIC ---
+        function toggleGlobalBubble() {
+            bubble.classList.toggle('show');
+        }
+
+        function toggleFinalBubble() {
+            finalBubble.classList.toggle('show');
+        }
+        
+        function toggleModalBubble() {
+            modalBubble.classList.toggle('show');
+        }
+
+        // --- SLIDE LOGIC ---
+        function updateSlide(index) {
+            const data = STORY_DATA[index];
+            const isFinal = index === STORY_DATA.length - 1;
+
+            sliderTrack.style.transform = `translateX(-${index * 20}%)`;
+
+            if (isFinal) {
+                // Final Slide Logic
+                catContainer.classList.add('hidden');
+                navHint.style.display = 'none';
+                startConfetti();
+                // Reset Final Bubble
+                finalBubble.classList.remove('show');
+            } else {
+                // Standard Slide Logic
+                catContainer.classList.remove('hidden');
+                navHint.style.display = 'block';
+                stopConfetti();
+
+                // 1. Hide Bubble immediately on slide change
+            //    bubble.classList.remove('show');
+            //    catImg.style.opacity = '0';
+
+                setTimeout(() => {
+                    // 2. Update Content
+                    catImg.src = data.cat;
+                    catImg.className = "";
+                    void catImg.offsetWidth;
+                    catImg.classList.add(data.anim);
+                    catImg.style.opacity = '1';
+                    
+                    bubbleText.innerHTML = data.text;
+                    // Note: Bubble remains hidden until tapped
+                }, 300);
+            }
+        }
+
+        // --- SWIPE LOGIC (MAIN CARD) ---
+        cardFrame.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, {passive: true});
+        cardFrame.addEventListener('touchend', e => {
+            if(!isUnlocked || isGalleryOpen) return;
+            touchEndX = e.changedTouches[0].screenX;
+            handleMainSwipe();
+        }, {passive: true});
+
+        function handleMainSwipe() {
+            if (Math.abs(touchEndX - touchStartX) < 40) return;
+            if (touchEndX < touchStartX) {
+                if (currentSlide < STORY_DATA.length - 1) {
+                    currentSlide++;
+                    updateSlide(currentSlide);
+                }
+            } else {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    updateSlide(currentSlide);
+                }
+            }
+        }
+
+        // --- GALLERY LOGIC ---
+        function openGallery() {
+            isGalleryOpen = true;
+            currentGalleryIndex = 0;
+            updateGalleryContent();
+            galleryModal.classList.add('active');
+        }
+
+        function closeGallery() {
+            isGalleryOpen = false;
+            galleryModal.classList.remove('active');
+        }
+
+        function updateGalleryContent() {
+            const data = GALLERY_DATA[currentGalleryIndex];
+            
+            modalImg.style.opacity = 0;
+            // Hide bubble on slide change
+            modalBubble.classList.remove('show');
+
+            setTimeout(() => {
+                modalImg.src = data.src;
+                modalBubble.innerHTML = data.msg;
+                modalImg.style.opacity = 1;
+                // Note: Bubble remains hidden until tapped
+            }, 300);
+        }
+
+        // --- SWIPE LOGIC (GALLERY) ---
+        modalSwipeArea.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, {passive: true});
+        modalSwipeArea.addEventListener('touchend', e => {
+            if(!isGalleryOpen) return;
+            touchEndX = e.changedTouches[0].screenX;
+            handleGallerySwipe();
+        }, {passive: true});
+
+        function handleGallerySwipe() {
+            if (Math.abs(touchEndX - touchStartX) < 40) return;
+            if (touchEndX < touchStartX) {
+                if (currentGalleryIndex < GALLERY_DATA.length - 1) {
+                    currentGalleryIndex++;
+                    updateGalleryContent();
+                }
+            } else {
+                if (currentGalleryIndex > 0) {
+                    currentGalleryIndex--;
+                    updateGalleryContent();
+                }
+            }
+        }
+
+        // --- CONFETTI ---
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let confettiLoop = null;
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = cardFrame.offsetWidth;
+            canvas.height = cardFrame.offsetHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        setTimeout(resizeCanvas, 100);
+
+        function startConfetti() {
+            resizeCanvas();
+            particles = [];
+            for(let i=0; i<60; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: -10,
+                    size: Math.random() * 6 + 4,
+                    speedY: Math.random() * 3 + 2,
+                    speedX: (Math.random() - 0.5) * 4,
+                    color: `hsl(${Math.random()*360}, 100%, 70%)`
+                });
+            }
+            if(!confettiLoop) loopConfetti();
+        }
+
+        function stopConfetti() {
+            if(confettiLoop) cancelAnimationFrame(confettiLoop);
+            confettiLoop = null;
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+        }
+
+        function loopConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.y += p.speedY;
+                p.x += p.speedX;
+                if(p.y > canvas.height) p.y = -10;
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.size, p.size);
+            });
+            confettiLoop = requestAnimationFrame(loopConfetti);
+        }
+
+    </script>
+</body>
+</html>
