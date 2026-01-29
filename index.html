@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Happy Birthday! 🎂</title>
+    <title>Aiz Birthday🩵</title>
     <style>
         /* --- CORE VARIABLES & RESET --- */
         :root {
@@ -74,6 +74,27 @@
             align-items: center; 
             justify-content: flex-start;
             padding-top: 60px;
+        }
+
+        .slide:nth-child(2)::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('img/10.jpeg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            border-radius: 24px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .slide:nth-child(2) > * {
+            position: relative;
+            z-index: 2;
         }
 
         /* --- TYPOGRAPHY --- */
@@ -237,8 +258,8 @@
         }
 
         .final-cat-wrapper {
-            width: 200px;
-            height: 200px;
+            width: 360px;
+            height: 360px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -413,7 +434,7 @@
 <body>
 
     <audio id="bg-music" loop>
-        <source src="https://cdn.pixabay.com/audio/2022/10/05/audio_68636ba2a7.mp3" type="audio/mpeg">
+        <source src="musik.mp3" type="audio/mpeg">
     </audio>
 
     <div id="card-frame">
@@ -421,7 +442,7 @@
         <!-- LOCK OVERLAY -->
         <div id="lock-screen" onclick="unlockGift()">
             <div class="gift-box" id="gift-icon">🎁</div>
-            <p style="opacity:0.6; font-size: 0.9rem;">Tap to Open</p>
+            <p style="opacity:0.6; font-size: 0.9rem;">Klik kadonyaa sayangg</p>
         </div>
 
         <!-- SLIDER -->
@@ -429,25 +450,32 @@
             
             <!-- Slide 0: Intro -->
             <div class="slide">
-                <h1 class="main-headline">Happy<br>Birthday!</h1>
-                <p class="sub-caption">To my favorite person in the world 🎂</p>
-                <div style="font-size: 4rem; margin-top: 30px;">🎉</div>
+                <h1 class="main-headline">Happy<br>Birthday <br> Cantikkuuu🩵</h1>
+                <p class="sub-caption">Akhirnya yaa yang ditunggu" <br>Hari ini 2 Februari 2026 <br>Aslii sii bener" hari yang aku tungguin banget, pengen rayain ultahnya adee <br> Aku berharep banget kmu sukaa sma yg aku kasii... <br> semoga yaa</p>
+                <div style="font-size: 4rem; margin-top: 30px;"></div>
             </div>
 
             <!-- Slide 1: Message -->
             <div class="slide">
                 <h1 class="main-headline">Wait... ✋</h1>
-                <p class="sub-caption">Time flies so fast, right? <br>Perasaan baru kemaren kita ketemu.</p>
-                <div style="font-size: 4rem; margin-top: 20px; opacity: 0.6;">⏳</div>
+                <p class="sub-caption">Time flies so fast, right? <br>Perasaan baru kemarin kita ketemu
+                <br><br> Makasii yaa sayang udah kasi aku ngerasain rasanya bener-bener punya pasangan
+                <br>Adee tuu cantikk, maniiss, pinter, baiikkk bangett, ade perhatian bangeettt, pedulii bangett, sabar, intinya sempurna, jujur rasanya masih ga nyangka bisa sma adee <br> Skali lagii makasii sayaa sayangg🩵</p>
             </div>
 
             <!-- Slide 2: Gallery Trigger -->
             <div class="slide">
                 <h1 class="main-headline">Throwback 📸</h1>
-                <p class="sub-caption">Tap foto buat liat aib-aib lucu kamu! 😜</p>
+                <p class="sub-caption">Foto kamu masih kecil, dari kecil ternyata emang udah cantikk sampe sekarang apalagi manisnyaa, ga hilang sedikitpunnn</p>
                 <div class="photo-stack" onclick="openGallery()">
-                    <div class="photo-card"><img src="https://images.unsplash.com/photo-1517423568366-8b83523034fd?w=500&auto=format&fit=crop&q=60" alt="Cover 1"></div>
-                    <div class="photo-card"><img src="https://images.unsplash.com/photo-1517677208171-0bc5e25bb396?w=500&auto=format&fit=crop&q=60" alt="Cover 2"></div>
+                    <div class="photo-card"><img src="img/1.jpeg" alt="Cover 1"></div>
+                    <div class="photo-card"><img src="img/2.jpeg" alt="Cover 2"></div>
+                    <div class="photo-card"><img src="img/3.jpeg" alt="Cover 2"></div>
+                    <div class="photo-card"><img src="img/4.jpeg" alt="Cover 2"></div>
+                    <div class="photo-card"><img src="img/5.jpeg" alt="Cover 2"></div>
+                    <div class="photo-card"><img src="img/6.jpeg" alt="Cover 2"></div>
+                    <div class="photo-card"><img src="img/7.jpeg" alt="Cover 2"></div>
+
                 </div>
                 <div class="tap-hint">Tap to open Gallery ✨</div>
             </div>
@@ -455,21 +483,24 @@
             <!-- Slide 3: Wish -->
             <div class="slide">
                 <h1 class="main-headline">My Wish ✨</h1>
-                <p class="sub-caption">Semoga happy terus, sehat always, dan makin sayang aku! 🥰</p>
-                <div style="font-size: 4rem; margin-top: 20px;">🙏</div>
+                <p class="sub-caption">Aku harap adee bahagia terus, jadi perempuan yang tegar dan manis😙<br>Ttep jadi diri sendiri yaa sayang, kmu tuu udah cantiikkk banget tauu
+                <br>Pengen cpet sukses biar bisa cpet nikahin adee😗
+                <br>Klo adee harapannya apaa?</p>
+            <!--    <div style="font-size: 4rem; margin-top: 20px; opacity: 0.6;">🙏</div> -->
+                <img src="img/3.jpeg" alt="Time together" style="max-width: 300px; max-height: 300px; margin-top: 20px; opacity: 0.6; object-fit: cover; border-radius: 8px;">
             </div>
 
             <!-- Slide 4: Finale -->
             <div class="slide" id="final-slide">
                 <div class="final-slide-container">
                     <div class="final-text-group">
-                        <h1 class="final-title">HBD<br>SAYANG ❤️</h1>
-                        <p class="final-subtitle">Semoga hari ini kamu ngerasa se-loved itu! Let's celebrate! 🎉</p>
+                        <h3 class="final-title">Happy Birthday<br><span style="color: #87CEEB;">Aizyra Amalya Garnis</span></h3>
+                        <p class="final-subtitle">Semoga suka yaa sma yg aku kasii,<br>I love u to the moon and back 🩵</p>
                     </div>
                     
                     <!-- Interactive Final Cat -->
                     <div class="final-cat-wrapper" onclick="toggleFinalBubble()">
-                        <div class="speech-bubble" id="final-bubble">Happy Birthday ❤️ semoga hari ini kamu ngerasa se-loved itu</div>
+                        <div class="speech-bubble" id="final-bubble"> If you're happy, we're happy too 😽</div>
                         <img src="img/semua.png" alt="Party Cat">
                     </div>
                 </div>
@@ -484,7 +515,7 @@
             <img src="" id="cat-img" alt="Cat Mascot">
         </div>
 
-        <div class="swipe-hint" id="nav-hint">Swipe Left ➡</div>
+        <div class="swipe-hint" id="nav-hint">Geser kiri ➡</div>
         <canvas id="confetti-canvas"></canvas>
 
     </div>
@@ -509,17 +540,21 @@
     <script>
         // --- DATA ---
         const STORY_DATA = [
-            { text: "Cieee yang nambah tua hari ini... tapi tetep cute kok! 😜", cat: "img/yuki.png", anim: "anim-pop" },
-            { text: "I'm so lucky to have you. ✨", cat: "img/emong.png", anim: "anim-pop" },
-            { text: "Coba buka deh fotonya, gemes banget! 😭🤏", cat: "img/meng.png", anim: "anim-pop" },
+            { text: "From Yuki: Haaiiiiiii... Happy 24th!🎂, semoga sedihnya dikurangin, dimudahin setiap urusannyaaa yaa, Yuki pasti ttep tmenin dikamar", cat: "img/yuki.png", anim: "anim-pop" },
+            { text: "From Emong: Danil beruntung banget bisa sma kmu, kmu perempuan terbaik yg pernah dia kenal", cat: "img/emong.png", anim: "anim-pop" },
+            { text: "Meenggg, Dari kecil ternyata mba ayis dahh cantikk yaaa", cat: "img/meng.png", anim: "anim-pop" },
             { text: "Pokoknya doa terbaik buat kamu! 💪", cat: "img/embul.png", anim: "anim-pop" },
             { text: "", cat: "", anim: "" } // Final slide handled separately
         ];
 
         const GALLERY_DATA = [
-            { src: "https://images.unsplash.com/photo-1517423568366-8b83523034fd?w=600&q=80", msg: "Ini pas kamu masih kecil kan? Lucu banget aaaaa 😭" },
-            { src: "https://images.unsplash.com/photo-1517677208171-0bc5e25bb396?w=600&q=80", msg: "Liat deh gaya kamu disini, cool abis 😎" },
-            { src: "https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=600&q=80", msg: "Definisi 'Glow Up' yang sesungguhnya! ✨" }
+            { src: "img/1.jpeg", msg: "Liaatt dahhh lucuu bangettt gemeesss 😙" },
+            { src: "img/2.jpeg", msg: "Main gitar bareng bapak 🎸😎" },
+            { src: "img/4.jpeg", msg: "Disini harusnya udah ketemu sma Danil pas TK ✨" },
+            { src: "img/5.jpeg", msg: "Real sii ga bohong, ini bidadari nyasar ke Kopang 😇" },
+            { src: "img/6.jpeg", msg: "Danil bilang dia pengen selalu rayain stiep usaha dan kerja kerasmu💐" },
+            { src: "img/7.jpeg", msg: "Semangat terus yaa sampe kmu dapetin bahagia yg kmu mau🩵" },
+            { src: "img/8.jpeg", msg: "Semua yg kmu usahain pasti bisa tercapai, kmu tu hebat banget tauuu 🏆" }
         ];
 
         // --- STATE ---
@@ -678,7 +713,8 @@
                 modalImg.src = data.src;
                 modalBubble.innerHTML = data.msg;
                 modalImg.style.opacity = 1;
-                // Note: Bubble remains hidden until tapped
+                // Auto show bubble
+                modalBubble.classList.add('show');
             }, 300);
         }
 
